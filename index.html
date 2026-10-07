@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#05070a">
+    <meta name="description" content="Veilwatch — The Other Side unofficial companion app with tools, encyclopedia, notes, and shared field utilities.">
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png">
+    <link rel="stylesheet" href="./css/styles.css">
+    <title>Veilwatch</title>
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="side-nav" aria-label="Primary navigation">
+            <div class="brand">
+                <strong>Veilwatch</strong>
+                <span>The Other Side · Unofficial Companion App</span>
+            </div>
+
+            <nav class="nav-list">
+                <button class="nav-button" type="button" data-nav-route="home">Home</button>
+                <button class="nav-button" type="button" data-nav-route="pms">P.M.S. Tracker</button>
+                <button class="nav-button" type="button" data-nav-route="ass">A.S.S. Profiler</button>
+                <button class="nav-button" type="button" data-nav-route="encyclopedia">Encyclopedia</button>
+                <button class="nav-button" type="button" data-nav-route="field-tools">Field Tools</button>
+                <button class="nav-button" type="button" data-nav-route="reference">Reference</button>
+                <button class="nav-button" type="button" data-nav-route="search">Search</button>
+                <button class="nav-button" type="button" data-nav-route="notes">My Notes</button>
+                <button class="nav-button" type="button" data-nav-route="maps">Maps · Coming Soon</button>
+            </nav>
+
+            <div class="nav-spacer"></div>
+
+            <nav class="nav-list">
+                <button class="nav-button" type="button" data-nav-route="settings">Settings</button>
+            </nav>
+        </aside>
+
+        <main id="appMain" class="app-main" tabindex="-1"></main>
+    </div>
+
+    <nav class="bottom-nav" aria-label="Mobile navigation">
+        <button class="nav-button" type="button" data-nav-route="home">Home</button>
+        <button class="nav-button" type="button" data-nav-route="pms">P.M.S.</button>
+        <button class="nav-button" type="button" data-nav-route="ass">A.S.S.</button>
+        <button class="nav-button" type="button" data-nav-route="encyclopedia">Ghosts</button>
+        <button class="nav-button" type="button" id="mobileMoreOpen" aria-haspopup="dialog" aria-controls="mobileMoreDialog">More</button>
+    </nav>
+
+    <dialog id="mobileMoreDialog" class="mobile-more-dialog" aria-labelledby="mobileMoreTitle">
+        <div class="mobile-more-card">
+            <header class="mobile-more-header">
+                <div>
+                    <span class="eyebrow">Veilwatch</span>
+                    <h2 id="mobileMoreTitle">More</h2>
+                </div>
+                <button class="dialog-close-button" type="button" id="mobileMoreClose">Close</button>
+            </header>
+
+            <nav class="mobile-more-links" aria-label="More destinations">
+                <button type="button" data-nav-route="field-tools">Field Tools</button>
+                <button type="button" data-nav-route="reference">Reference</button>
+                <button type="button" data-nav-route="search">Global Search</button>
+                <button type="button" data-nav-route="notes">My Notes</button>
+                <button type="button" class="mobile-more-coming-soon" aria-disabled="true">Maps <span>Coming Soon</span></button>
+                <button type="button" data-nav-route="settings">Settings</button>
+            </nav>
+        </div>
+    </dialog>
+
+    <dialog id="investigationNotesDialog" class="investigation-notes-dialog" aria-labelledby="investigationNotesTitle">
+        <form method="dialog" class="investigation-notes-card">
+            <header class="investigation-notes-header">
+                <div>
+                    <span class="eyebrow">Active investigation</span>
+                    <h2 id="investigationNotesTitle">Investigation Notes</h2>
+                </div>
+                <button class="dialog-close-button" type="submit" aria-label="Close investigation notes">Close</button>
+            </header>
+
+            <p id="investigationNotesHelp" class="investigation-notes-help"></p>
+            <textarea id="investigationNotesBody" class="investigation-notes-textarea" rows="12" maxlength="50000" aria-describedby="investigationNotesHelp investigationNotesStatus" placeholder="Type notes for this investigation..."></textarea>
+            <p id="investigationNotesStatus" class="status-message" role="status" aria-live="polite"></p>
+        </form>
+    </dialog>
+
+    <script src="./app-config.js"></script>
+    <script src="./js/storage.js"></script>
+    <script src="./js/notes.js"></script>
+    <script src="./js/backup.js"></script>
+    <script src="./js/tracker-host.js"></script>
+    <script src="./js/knowledge-data.js"></script>
+    <script src="./js/search.js"></script>
+    <script src="./js/app.js"></script>
+</body>
+</html>

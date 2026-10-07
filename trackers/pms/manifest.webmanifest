@@ -1,0 +1,25 @@
+{
+  "name": "P.M.S. Tracker - The Other Side",
+  "short_name": "P.M.S. Tracker",
+  "description": "Paranormal Monitoring System Tracker and identification assistant for The Other Side.",
+  "id": "./Index.html",
+  "start_url": "./Index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#bb86fc",
+  "icons": [
+    {
+      "src": "./icons/pms-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/pms-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+    "id": "./index.html",
+    "name": "Veilwatch",
+    "short_name": "Veilwatch",
+    "description": "Veilwatch — The Other Side unofficial companion app with tools, encyclopedia, reference, notes, and shared field utilities.",
+    "start_url": "./index.html",
+    "scope": "./",
+    "display": "standalone",
+    "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+    "background_color": "#05070a",
+    "theme_color": "#05070a",
+    "categories": ["games", "utilities", "reference"],
+    "shortcuts": [
+        {"name": "P.M.S. Tracker", "url": "./index.html#/pms"},
+        {"name": "A.S.S. Profiler", "url": "./index.html#/ass"},
+        {"name": "Ghost Encyclopedia", "url": "./index.html#/encyclopedia"},
+        {"name": "Field Tools", "url": "./index.html#/field-tools"}
+    ],
+    "icons": [
+        {
+            "src": "./assets/icons/app-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "./assets/icons/app-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
