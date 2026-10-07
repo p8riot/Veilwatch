@@ -111,7 +111,7 @@
                 filterType: "evidence",
                 group: "Evidence",
                 title: entry.name,
-                subtitle: `P.M.S.: ${entry.identifyLabel} · A.S.S.: ${entry.cleanseName}`,
+                subtitle: `Paranormal Tracker: ${entry.identifyLabel} · Affixer Matrix: ${entry.cleanseName}`,
                 body: [
                     `Diminishing ${entry.diminishingAllowed ? "allowed" : "not allowed"}`,
                     ...(entry.cleanseLevels || []).map((level) => `Level ${level.level} ${level.text}`)
@@ -132,7 +132,7 @@
                 filterType: "reference",
                 group: "Behaviors",
                 title: entry.name,
-                subtitle: "P.M.S. behavior reference",
+                subtitle: "Paranormal Tracker behavior reference",
                 body: (entry.states || []).join(" "),
                 aliases: ["behavior", "behaviour", ...(entry.states || [])],
                 target: { route: "reference", view: "behaviors" }
@@ -170,9 +170,9 @@
                 filterType: "reference",
                 group: equipment ? "Equipment" : "Cleansing",
                 title: group.title,
-                subtitle: equipment ? "A.S.S. equipment reference" : "A.S.S. cleansing reference",
+                subtitle: equipment ? "Affixer Matrix equipment reference" : "Affixer Matrix cleansing reference",
                 body: (group.items || []).join(" "),
-                aliases: [equipment ? "equipment" : "cleansing", "field notes", "a.s.s."],
+                aliases: [equipment ? "equipment" : "cleansing", "field notes", "affixer matrix"],
                 target: { route: "reference", view: equipment ? "equipment" : "cleansing" }
             }));
         });
@@ -196,7 +196,7 @@
                 filterType: "reference",
                 group: "Mechanics",
                 title: "Heart Rate Status Ranges",
-                subtitle: "P.M.S. heart-rate reference",
+                subtitle: "Paranormal Tracker heart-rate reference",
                 body: knowledge.heartRateRanges.join(" "),
                 aliases: ["heart rate", "bpm", "anxiety", "hunt chance"],
                 target: { route: "reference", view: "mechanics" }

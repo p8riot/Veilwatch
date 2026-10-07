@@ -11,8 +11,8 @@
     "theme_color": "#05070a",
     "categories": ["games", "utilities", "reference"],
     "shortcuts": [
-        {"name": "P.M.S. Tracker", "url": "./index.html#/pms"},
-        {"name": "A.S.S. Profiler", "url": "./index.html#/ass"},
+        {"name": "Paranormal Tracker", "url": "./index.html#/paranormal-tracker"},
+        {"name": "Affixer Matrix", "url": "./index.html#/affixer-matrix"},
         {"name": "Ghost Encyclopedia", "url": "./index.html#/encyclopedia"},
         {"name": "Field Tools", "url": "./index.html#/field-tools"}
     ],

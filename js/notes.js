@@ -9,8 +9,8 @@
     const config = window.tosAllInOneConfig;
     const persistentKey = "notes:persistent";
     const investigationKeys = Object.freeze({
-        pms: "notes:investigation:pms",
-        ass: "notes:investigation:ass"
+        "paranormal-tracker": "notes:investigation:paranormal-tracker",
+        "affixer-matrix": "notes:investigation:affixer-matrix"
     });
     const contextTypes = Object.freeze([
         "general",
@@ -255,7 +255,7 @@
     // ============================================================================
 
     function validTracker(tracker) {
-        return tracker === "pms" || tracker === "ass";
+        return tracker === "paranormal-tracker" || tracker === "affixer-matrix";
     }
 
     function getInvestigationNote(tracker) {

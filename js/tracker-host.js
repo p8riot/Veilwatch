@@ -3,24 +3,24 @@
 
     // ============================================================================
     // [JS-TRACKER-01] TRACKER DEFINITIONS
-    // P.M.S. and A.S.S. remain independent game-mode applications. The host owns
+    // Paranormal Tracker and Affixer Matrix remain independent game-mode applications. The host owns
     // mounting, shared navigation, and persistence transport only.
     // ============================================================================
 
     const storage = window.tosStorage;
 
     const trackerDefinitions = Object.freeze({
-        pms: Object.freeze({
-            title: "P.M.S. Tracker",
+        "paranormal-tracker": Object.freeze({
+            title: "Paranormal Tracker",
             version: "2.3.1",
-            src: "./trackers/pms/Index.html",
-            storageKey: "tracker:pms:state"
+            src: "./trackers/paranormal-tracker/Index.html",
+            storageKey: "tracker:paranormal-tracker:state"
         }),
-        ass: Object.freeze({
-            title: "A.S.S. Profiler",
+        "affixer-matrix": Object.freeze({
+            title: "Affixer Matrix",
             version: "1.4.1",
-            src: "./trackers/ass/cleanse.html",
-            storageKey: "tracker:ass:state"
+            src: "./trackers/affixer-matrix/cleanse.html",
+            storageKey: "tracker:affixer-matrix:state"
         })
     });
 
@@ -225,8 +225,8 @@
     }
 
     function resetAllHostedTrackers() {
-        resetHostedTracker("pms");
-        resetHostedTracker("ass");
+        resetHostedTracker("paranormal-tracker");
+        resetHostedTracker("affixer-matrix");
         return { ok: true };
     }
 

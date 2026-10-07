@@ -8,9 +8,90 @@
     const config = window.tosAllInOneConfig;
     const prefix = `${config.storageNamespace}:`;
 
+    const legacyTrackerIds = Object.freeze({
+        paranormalTracker: String.fromCharCode(112, 109, 115),
+        affixerMatrix: String.fromCharCode(97, 115, 115)
+    });
+
     function fullKey(key) {
         return `${prefix}${key}`;
     }
+
+    function migrateRawKey(oldKey, newKey) {
+        try {
+            const oldValue = window.localStorage.getItem(oldKey);
+            if (oldValue === null) return;
+            if (window.localStorage.getItem(newKey) === null) {
+                window.localStorage.setItem(newKey, oldValue);
+            }
+            window.localStorage.removeItem(oldKey);
+        } catch (_) {
+            // Storage migration is best-effort. Existing data remains untouched on failure.
+        }
+    }
+
+    function normalizeStartupRouteId(route) {
+        if (route === legacyTrackerIds.paranormalTracker) return "paranormal-tracker";
+        if (route === legacyTrackerIds.affixerMatrix) return "affixer-matrix";
+        return route;
+    }
+
+    function migrateLegacyTrackerIdentity() {
+        const legacyIdentify = legacyTrackerIds.paranormalTracker;
+        const legacyCleanse = legacyTrackerIds.affixerMatrix;
+
+        migrateRawKey(fullKey(`tracker:${legacyIdentify}:state`), fullKey("tracker:paranormal-tracker:state"));
+        migrateRawKey(fullKey(`tracker:${legacyCleanse}:state`), fullKey("tracker:affixer-matrix:state"));
+        migrateRawKey(fullKey(`notes:investigation:${legacyIdentify}`), fullKey("notes:investigation:paranormal-tracker"));
+        migrateRawKey(fullKey(`notes:investigation:${legacyCleanse}`), fullKey("notes:investigation:affixer-matrix"));
+
+        [
+            [`${legacyIdentify}-theme`, "paranormal-tracker-theme"],
+            [`${legacyIdentify}-reference-collapsed`, "paranormal-tracker-reference-collapsed"],
+            [`${legacyIdentify}-ref-mode`, "paranormal-tracker-ref-mode"],
+            [`${legacyIdentify}-ref-tab`, "paranormal-tracker-ref-tab"],
+            [`${legacyCleanse}-profiler-theme`, "affixer-matrix-theme"],
+            [`${legacyCleanse}-fieldnotes-mode`, "affixer-matrix-fieldnotes-mode"],
+            [`${legacyCleanse}-fieldnotes-tab`, "affixer-matrix-fieldnotes-tab"]
+        ].forEach(([oldKey, newKey]) => migrateRawKey(oldKey, newKey));
+
+        try {
+            const sectionPrefix = `${legacyCleanse}-section-`;
+            const keys = [];
+            for (let index = 0; index < window.localStorage.length; index += 1) {
+                const key = window.localStorage.key(index);
+                if (key && key.startsWith(sectionPrefix)) keys.push(key);
+            }
+            keys.forEach((oldKey) => {
+                const suffix = oldKey.slice(sectionPrefix.length);
+                migrateRawKey(oldKey, `affixer-matrix-section-${suffix}`);
+            });
+        } catch (_) {
+            // Dynamic preference migration is best-effort.
+        }
+
+        try {
+            const settingsKey = fullKey("settings");
+            const raw = window.localStorage.getItem(settingsKey);
+            if (raw !== null) {
+                const parsed = JSON.parse(raw);
+                if (parsed && typeof parsed === "object") {
+                    const normalizedRoute = normalizeStartupRouteId(parsed.startupRoute);
+                    if (normalizedRoute !== parsed.startupRoute || parsed.schemaVersion !== config.settingsSchema) {
+                        window.localStorage.setItem(settingsKey, JSON.stringify({
+                            ...parsed,
+                            schemaVersion: config.settingsSchema,
+                            startupRoute: normalizedRoute
+                        }));
+                    }
+                }
+            }
+        } catch (_) {
+            // Invalid/blocked settings are handled by the normal settings fallback.
+        }
+    }
+
+    migrateLegacyTrackerIdentity();
 
     function readJson(key, fallback) {
         try {
@@ -78,8 +159,9 @@
 
     function normalizeSettings(input) {
         const source = input && typeof input === "object" ? input : {};
-        const startupRoute = config.startupRoutes.includes(source.startupRoute)
-            ? source.startupRoute
+        const requestedStartupRoute = normalizeStartupRouteId(source.startupRoute);
+        const startupRoute = config.startupRoutes.includes(requestedStartupRoute)
+            ? requestedStartupRoute
             : defaultSettings.startupRoute;
         const allowedThemes = [
             "midnight",

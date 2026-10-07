@@ -1,16 +1,16 @@
 window.tosKnowledge = {
     "metadata": {
         "schemaVersion": 1,
-        "generatedFor": "Veilwatch 0.4.1",
-        "pms": {
+        "generatedFor": "Veilwatch 0.5.0",
+        "paranormalTracker": {
             "version": "2.3.1",
-            "entry": "trackers/pms/Index.html",
-            "sha256": "b02ac0b8586a4325057b9ff575a3d974a52bdab115fb9c22cd16cba7b13c1218"
+            "entry": "trackers/paranormal-tracker/Index.html",
+            "sha256": "83a7cc684dc1df34e72a87d02c964bdd698ffa7e3e846b6f91d479526b84f2f9"
         },
-        "ass": {
+        "affixerMatrix": {
             "version": "1.4.1",
-            "entry": "trackers/ass/cleanse.html",
-            "sha256": "c9ed29f24c6396e60a9795fcc559344f4ca76093672b873c78e9710455167d6f"
+            "entry": "trackers/affixer-matrix/cleanse.html",
+            "sha256": "fefaeff7afb5b1d0767acc7e39754424b6f522ae723d480442ba9e5b1038b4af"
         },
         "ghostCount": 25
     },
@@ -1896,7 +1896,7 @@ window.tosKnowledge = {
             "12 Ravenwood Lane (Gary) Normal model: White polka dot jester hat and pants, with white face makeup, bloody spots on face, arms and upper body. Shapeshift cosmetics: Green jester hat and green plaid pants, with different makeup // Beige polka dot jester hat and pants, with no makeup."
         ]
     },
-    "pmsStats": {
+    "paranormalTrackerStats": {
         "gameRules": {
             "maxRealEvidence": 3,
             "maxFalseEvidence": 2,

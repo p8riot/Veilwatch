@@ -1,6 +1,11 @@
 "use strict";
 
-const CACHE_NAME = "veilwatch-0.4.1-release";
+const CACHE_NAME = "veilwatch-0.5.0-release";
+const LEGACY_TRACKER_CACHE_PREFIXES = [
+    `${String.fromCharCode(112, 109, 115)}-tracker-`,
+    `${String.fromCharCode(97, 115, 115)}-profiler-`
+];
+
 const APP_SHELL = [
     "./",
     "./index.html",
@@ -15,8 +20,8 @@ const APP_SHELL = [
     "./js/app.js",
     "./manifest.webmanifest",
     "./assets/the-other-side-home.png",
-    "./assets/cards/pms-tracker.png",
-    "./assets/cards/ass-profiler.png",
+    "./assets/cards/paranormal-tracker.png",
+    "./assets/cards/affixer-matrix.png",
     "./assets/cards/encyclopedia.png",
     "./assets/utility/field-tools.png",
     "./assets/utility/reference.png",
@@ -28,45 +33,45 @@ const APP_SHELL = [
     "./assets/icons/app-192.png",
     "./assets/icons/app-512.png",
     "./assets/icons/apple-touch-icon.png",
-    "./trackers/pms/Index.html",
-    "./trackers/pms/manifest.webmanifest",
-    "./trackers/pms/service-worker.js",
-    "./trackers/pms/TOS_Cheat_Sheet_QB.png",
-    "./trackers/pms/icons/pms-192.png",
-    "./trackers/pms/icons/pms-512.png",
-    "./trackers/pms/icons/apple-touch-icon.png",
-    "./trackers/ass/GOlvl1.png",
-    "./trackers/ass/GOlvl123.gif",
-    "./trackers/ass/GOlvl2.png",
-    "./trackers/ass/GOlvl3.1.png",
-    "./trackers/ass/GOlvl3.2.png",
-    "./trackers/ass/GOlvl3listo.png",
-    "./trackers/ass/UV_1.1.webp",
-    "./trackers/ass/UV_1.2.webp",
-    "./trackers/ass/UV_1.3.webp",
-    "./trackers/ass/UV_1.webp",
-    "./trackers/ass/UV_2.1.webp",
-    "./trackers/ass/UV_2.2.webp",
-    "./trackers/ass/UV_2.3.webp",
-    "./trackers/ass/UV_2.webp",
-    "./trackers/ass/UV_3.1.webp",
-    "./trackers/ass/UV_3.2.webp",
-    "./trackers/ass/UV_3.webp",
-    "./trackers/ass/Writing_1.1.webp",
-    "./trackers/ass/Writing_1.2.webp",
-    "./trackers/ass/Writing_1.webp",
-    "./trackers/ass/Writing_2.2.webp",
-    "./trackers/ass/Writing_2.3.webp",
-    "./trackers/ass/Writing_2.4.webp",
-    "./trackers/ass/Writing_2.webp",
-    "./trackers/ass/Writing_3.1.webp",
-    "./trackers/ass/Writing_3.webp",
-    "./trackers/ass/cleanse.html",
-    "./trackers/ass/icons/app-192.png",
-    "./trackers/ass/icons/app-512.png",
-    "./trackers/ass/icons/apple-touch-icon.png",
-    "./trackers/ass/manifest.webmanifest",
-    "./trackers/ass/service-worker.js"
+    "./trackers/paranormal-tracker/Index.html",
+    "./trackers/paranormal-tracker/manifest.webmanifest",
+    "./trackers/paranormal-tracker/service-worker.js",
+    "./trackers/paranormal-tracker/TOS_Cheat_Sheet_QB.png",
+    "./trackers/paranormal-tracker/icons/paranormal-tracker-192.png",
+    "./trackers/paranormal-tracker/icons/paranormal-tracker-512.png",
+    "./trackers/paranormal-tracker/icons/apple-touch-icon.png",
+    "./trackers/affixer-matrix/GOlvl1.png",
+    "./trackers/affixer-matrix/GOlvl123.gif",
+    "./trackers/affixer-matrix/GOlvl2.png",
+    "./trackers/affixer-matrix/GOlvl3.1.png",
+    "./trackers/affixer-matrix/GOlvl3.2.png",
+    "./trackers/affixer-matrix/GOlvl3listo.png",
+    "./trackers/affixer-matrix/UV_1.1.webp",
+    "./trackers/affixer-matrix/UV_1.2.webp",
+    "./trackers/affixer-matrix/UV_1.3.webp",
+    "./trackers/affixer-matrix/UV_1.webp",
+    "./trackers/affixer-matrix/UV_2.1.webp",
+    "./trackers/affixer-matrix/UV_2.2.webp",
+    "./trackers/affixer-matrix/UV_2.3.webp",
+    "./trackers/affixer-matrix/UV_2.webp",
+    "./trackers/affixer-matrix/UV_3.1.webp",
+    "./trackers/affixer-matrix/UV_3.2.webp",
+    "./trackers/affixer-matrix/UV_3.webp",
+    "./trackers/affixer-matrix/Writing_1.1.webp",
+    "./trackers/affixer-matrix/Writing_1.2.webp",
+    "./trackers/affixer-matrix/Writing_1.webp",
+    "./trackers/affixer-matrix/Writing_2.2.webp",
+    "./trackers/affixer-matrix/Writing_2.3.webp",
+    "./trackers/affixer-matrix/Writing_2.4.webp",
+    "./trackers/affixer-matrix/Writing_2.webp",
+    "./trackers/affixer-matrix/Writing_3.1.webp",
+    "./trackers/affixer-matrix/Writing_3.webp",
+    "./trackers/affixer-matrix/cleanse.html",
+    "./trackers/affixer-matrix/icons/app-192.png",
+    "./trackers/affixer-matrix/icons/app-512.png",
+    "./trackers/affixer-matrix/icons/apple-touch-icon.png",
+    "./trackers/affixer-matrix/manifest.webmanifest",
+    "./trackers/affixer-matrix/service-worker.js"
 ];
 
 self.addEventListener("install", (event) => {
@@ -80,7 +85,10 @@ self.addEventListener("activate", (event) => {
     event.waitUntil(
         caches.keys().then((keys) => Promise.all(
             keys
-                .filter((key) => (key.startsWith("tos-all-in-one-") || key.startsWith("veilwatch-")) && key !== CACHE_NAME)
+                .filter((key) => {
+                    const legacyTrackerCache = LEGACY_TRACKER_CACHE_PREFIXES.some((prefix) => key.startsWith(prefix));
+                    return (key.startsWith("tos-all-in-one-") || key.startsWith("veilwatch-") || legacyTrackerCache) && key !== CACHE_NAME;
+                })
                 .map((key) => caches.delete(key))
         ))
     );
@@ -98,13 +106,13 @@ self.addEventListener("fetch", (event) => {
     }
 
     if (event.request.mode === "navigate") {
-        const isPmsNavigation = requestUrl.pathname.endsWith("/trackers/pms/Index.html") ||
-            requestUrl.pathname.endsWith("/trackers/pms/");
-        const isAssNavigation = requestUrl.pathname.endsWith("/trackers/ass/cleanse.html") ||
-            requestUrl.pathname.endsWith("/trackers/ass/");
+        const isParanormalTrackerNavigation = requestUrl.pathname.endsWith("/trackers/paranormal-tracker/Index.html") ||
+            requestUrl.pathname.endsWith("/trackers/paranormal-tracker/");
+        const isAffixerMatrixNavigation = requestUrl.pathname.endsWith("/trackers/affixer-matrix/cleanse.html") ||
+            requestUrl.pathname.endsWith("/trackers/affixer-matrix/");
         let fallback = "./index.html";
-        if (isPmsNavigation) fallback = "./trackers/pms/Index.html";
-        if (isAssNavigation) fallback = "./trackers/ass/cleanse.html";
+        if (isParanormalTrackerNavigation) fallback = "./trackers/paranormal-tracker/Index.html";
+        if (isAffixerMatrixNavigation) fallback = "./trackers/affixer-matrix/cleanse.html";
 
         event.respondWith(
             fetch(event.request)

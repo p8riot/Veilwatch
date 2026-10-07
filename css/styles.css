@@ -570,13 +570,13 @@ body[data-route="home"] .app-main {
         rgba(0, 0, 0, 0.52);
 }
 
-.featured-card--pms .featured-card__visual {
+.featured-card--paranormal-tracker .featured-card__visual {
     background:
         radial-gradient(circle at 50% 42%, rgba(174, 89, 255, 0.18), transparent 57%),
         rgba(0, 0, 0, 0.58);
 }
 
-.featured-card--ass .featured-card__visual {
+.featured-card--affixer-matrix .featured-card__visual {
     background:
         radial-gradient(circle at 50% 42%, rgba(45, 219, 159, 0.15), transparent 57%),
         rgba(0, 0, 0, 0.58);
@@ -1048,20 +1048,20 @@ body[data-route="home"] .app-main {
 [CSS-07] PROTECTED TRACKER HOST
 ===================================================================== */
 
-body[data-route="pms"] .app-shell,
-body[data-route="ass"] .app-shell {
+body[data-route="paranormal-tracker"] .app-shell,
+body[data-route="affixer-matrix"] .app-shell {
     display: block;
 }
 
-body[data-route="pms"] .side-nav,
-body[data-route="pms"] .bottom-nav,
-body[data-route="ass"] .side-nav,
-body[data-route="ass"] .bottom-nav {
+body[data-route="paranormal-tracker"] .side-nav,
+body[data-route="paranormal-tracker"] .bottom-nav,
+body[data-route="affixer-matrix"] .side-nav,
+body[data-route="affixer-matrix"] .bottom-nav {
     display: none;
 }
 
-body[data-route="pms"] .app-main,
-body[data-route="ass"] .app-main {
+body[data-route="paranormal-tracker"] .app-main,
+body[data-route="affixer-matrix"] .app-main {
     width: 100%;
     min-height: 100vh;
     min-height: 100svh;
@@ -2511,7 +2511,7 @@ body[data-route="ass"] .app-main {
 }
 
 /* =====================================================================
-[CSS-13] VEILWATCH 0.4.0 COMMUNITY + ABOUT REFINEMENTS
+[CSS-13] VEILWATCH COMMUNITY + ABOUT REFINEMENTS
 ===================================================================== */
 
 .community-launcher-row {

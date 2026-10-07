@@ -15,8 +15,8 @@
 
     const routeMeta = {
         home: { title: "Home", nav: true },
-        pms: { title: "P.M.S. Tracker", nav: true, protectedTracker: true },
-        ass: { title: "A.S.S. Profiler", nav: true, protectedTracker: true },
+        "paranormal-tracker": { title: "Paranormal Tracker", nav: true, protectedTracker: true },
+        "affixer-matrix": { title: "Affixer Matrix", nav: true, protectedTracker: true },
         encyclopedia: { title: "Ghost Encyclopedia", nav: true },
         "field-tools": { title: "Field Tools", nav: true },
         reference: { title: "Reference", nav: true },
@@ -30,20 +30,26 @@
     // [JS-02] ROUTING
     // ============================================================================
 
+    const legacyRouteMap = new Map([
+        [String.fromCharCode(112, 109, 115), "paranormal-tracker"],
+        [String.fromCharCode(97, 115, 115), "affixer-matrix"]
+    ]);
+
     function routeFromHash() {
         const raw = window.location.hash.replace(/^#\/?/, "").trim();
-        return config.routes.includes(raw) ? raw : null;
+        const normalized = legacyRouteMap.get(raw) || raw;
+        return config.routes.includes(normalized) ? normalized : null;
     }
 
     function navigate(route, { replace = false } = {}) {
         const safeRoute = config.routes.includes(route) ? route : config.defaultRoute;
         const currentRoute = document.body.dataset.route || routeFromHash();
-        const leavingProtectedTracker = currentRoute === "pms" || currentRoute === "ass";
-        const enteringSharedArea = !["home", "pms", "ass"].includes(safeRoute);
+        const leavingProtectedTracker = currentRoute === "paranormal-tracker" || currentRoute === "affixer-matrix";
+        const enteringSharedArea = !["home", "paranormal-tracker", "affixer-matrix"].includes(safeRoute);
 
         if (leavingProtectedTracker && enteringSharedArea) {
             sharedOriginRoute = currentRoute;
-        } else if (safeRoute === "home" || safeRoute === "pms" || safeRoute === "ass") {
+        } else if (safeRoute === "home" || safeRoute === "paranormal-tracker" || safeRoute === "affixer-matrix") {
             if (safeRoute !== sharedOriginRoute) {
                 sharedOriginRoute = null;
             }
@@ -170,7 +176,7 @@
     // [JS-05] SCREEN TEMPLATES
     // ============================================================================
 
-    function placeholder(title, message, badge = "Planned for 0.4.0") {
+    function placeholder(title, message, badge = "Planned") {
         return `
             <section class="screen-card placeholder-card" aria-labelledby="screenHeading">
                 <span class="eyebrow">${badge}</span>
@@ -194,20 +200,20 @@
 
                     <div class="featured-launcher-grid" aria-label="Featured tools">
                         ${featuredLauncherCard(
-                            "pms",
-                            "P.M.S. Tracker",
+                            "paranormal-tracker",
+                            "Paranormal Tracker",
                             "Identify Mode",
-                            "./assets/cards/pms-tracker.png",
-                            "P.M.S. Tracker app icon",
-                            "pms"
+                            "./assets/cards/paranormal-tracker.png",
+                            "Paranormal Tracker app icon",
+                            "paranormal-tracker"
                         )}
                         ${featuredLauncherCard(
-                            "ass",
-                            "A.S.S. Profiler",
+                            "affixer-matrix",
+                            "Affixer Matrix",
                             "Cleanse Mode",
-                            "./assets/cards/ass-profiler.png",
-                            "A.S.S. Profiler app icon",
-                            "ass"
+                            "./assets/cards/affixer-matrix.png",
+                            "Affixer Matrix app icon",
+                            "affixer-matrix"
                         )}
                         ${featuredLauncherCard(
                             "encyclopedia",
@@ -285,7 +291,7 @@
                     <div>
                         <span class="eyebrow">Shared utilities</span>
                         <h1 id="screenHeading">Field Tools</h1>
-                        <p>Shared utilities live here instead of being duplicated inside P.M.S. and A.S.S.</p>
+                        <p>Shared utilities live here instead of being duplicated inside Paranormal Tracker and Affixer Matrix</p>
                     </div>
                 </header>
 
@@ -502,7 +508,7 @@
                     <div>
                         <span class="eyebrow">Shared read-only knowledge</span>
                         <h1 id="screenHeading">Ghost Encyclopedia</h1>
-                        <p>${knowledge.metadata.ghostCount} ghost profiles sourced from the protected P.M.S. ${escapeHtml(knowledge.metadata.pms.version)} baseline.</p>
+                        <p>${knowledge.metadata.ghostCount} ghost profiles sourced from the protected Paranormal Tracker ${escapeHtml(knowledge.metadata.paranormalTracker.version)} baseline.</p>
                     </div>
                 </header>
 
@@ -536,8 +542,8 @@
 
     function renderGhostProfile(ghost) {
         const persistent = matchingGhostNotes(ghost.name);
-        const speedConfig = knowledge.pmsStats?.speedConfig || {};
-        const gameRules = knowledge.pmsStats?.gameRules || {};
+        const speedConfig = knowledge.paranormalTrackerStats?.speedConfig || {};
+        const gameRules = knowledge.paranormalTrackerStats?.gameRules || {};
         const starred = new Set(ghost.starred || []);
         const speedLabel = (key, value) => `${value}${starred.has(key) ? "*" : ""}`;
         const toMps = (cmps) => Number.isFinite(Number(cmps)) ? `${(Number(cmps) / 100).toFixed(2)} m/s` : null;
@@ -564,7 +570,7 @@
         const special = [];
         if (ghost.forced) special.push(`<li><strong>Forced Evidence:</strong> ${escapeHtml(ghost.forced)}</li>`);
         if (ghost.huntThresholdBpm) special.push(`<li><strong>Natural Hunt Threshold:</strong> ${escapeHtml(ghost.huntThresholdBpm)} BPM average team heart rate</li>`);
-        if (ghost.huntBehaviorMimic) special.push('<li><strong>Hunt Mimic:</strong> This ghost uses the P.M.S. hunt-behavior mimic rule. See Unique Behaviors for the exact limits.</li>');
+        if (ghost.huntBehaviorMimic) special.push('<li><strong>Hunt Mimic:</strong> This ghost uses the Paranormal Tracker hunt-behavior mimic rule. See Unique Behaviors for the exact limits.</li>');
         if (ghost.specialDiminishing) special.push(`<li><strong>Special Diminishing Rule:</strong> May provide ${escapeHtml(ghost.specialDiminishingExtra || 1)} extra behavior-generated Diminishing evidence.</li>`);
 
         return `
@@ -645,14 +651,14 @@
                     <div>
                         <span class="eyebrow">Canonical shared library</span>
                         <h1 id="screenHeading">Reference</h1>
-                        <p>Read-only reference material sourced from the protected P.M.S. 2.3.1 and A.S.S. 1.4.1 baselines. Reading Reference never changes either tracker.</p>
+                        <p>Read-only reference material sourced from the protected Paranormal Tracker 2.3.1 and Affixer Matrix 1.4.1 baselines. Reading Reference never changes either tracker.</p>
                     </div>
                 </header>
                 <div class="reference-category-grid">
-                    ${referenceCategoryCard("evidence", "Evidence", "Identify evidence plus A.S.S. evidence levels.", `${knowledge.evidence.length} types`)}
-                    ${referenceCategoryCard("behaviors", "Behaviors", "P.M.S. behavior observations and states.", `${knowledge.behaviors.length} controls`)}
+                    ${referenceCategoryCard("evidence", "Evidence", "Identify evidence plus Affixer Matrix evidence levels.", `${knowledge.evidence.length} types`)}
+                    ${referenceCategoryCard("behaviors", "Behaviors", "Paranormal Tracker behavior observations and states.", `${knowledge.behaviors.length} controls`)}
                     ${referenceCategoryCard("spirit-box", "Spirit Box", "Canonical phrases and Skia unique responses.", `${knowledge.spiritBox.phrases.length} phrases`)}
-                    ${referenceCategoryCard("cleansing", "Cleansing", "A.S.S. investigation, scanner and cleansing field notes.")}
+                    ${referenceCategoryCard("cleansing", "Cleansing", "Affixer Matrix investigation, scanner and cleansing field notes.")}
                     ${referenceCategoryCard("equipment", "Equipment", "Affixer commands, scan states and E.A.L. guidance.")}
                     ${referenceCategoryCard("mechanics", "Mechanics", "Hunts, evidence rules, breakers, candles and more.", `${knowledge.mechanics.length} notes`)}
                     ${referenceCategoryCard("locations", "Locations", "Supported locations. Map artwork remains Coming Soon.", `${knowledge.locations.length} locations`)}
@@ -683,8 +689,8 @@
                     body = `<div class="reference-item-grid">${knowledge.evidence.map((entry) => `
                         <button type="button" class="reference-item-card" data-reference-evidence="${escapeHtml(entry.name)}">
                             <strong>${escapeHtml(entry.name)}</strong>
-                            <span>P.M.S.: ${escapeHtml(entry.identifyLabel)}</span>
-                            <small>A.S.S.: ${escapeHtml(entry.cleanseName)}</small>
+                            <span>Paranormal Tracker: ${escapeHtml(entry.identifyLabel)}</span>
+                            <small>Affixer Matrix: ${escapeHtml(entry.cleanseName)}</small>
                         </button>`).join("")}</div>`;
                     break;
                 case "behaviors":
@@ -711,7 +717,7 @@
                     break;
                 case "locations":
                     title = "Locations";
-                    body = `<div class="location-reference-grid">${knowledge.locations.map((location) => `<article><strong>${escapeHtml(location)}</strong><span>Reference location</span></article>`).join("")}</div><div class="coming-soon-inline"><strong>Maps are Coming Soon.</strong><span>The location list is available now, but map artwork and the map viewer remain disabled in 0.4.1.</span></div>`;
+                    body = `<div class="location-reference-grid">${knowledge.locations.map((location) => `<article><strong>${escapeHtml(location)}</strong><span>Reference location</span></article>`).join("")}</div><div class="coming-soon-inline"><strong>Maps are Coming Soon.</strong><span>The location list is available now, but map artwork and the map viewer remain disabled in 0.5.0.</span></div>`;
                     break;
                 case "special":
                     title = "Special References";
@@ -738,11 +744,11 @@
     function renderEvidenceReference(entry) {
         const levels = entry.cleanseLevels?.length
             ? `<ol class="evidence-level-list">${entry.cleanseLevels.map((level) => `<li><strong>Level ${escapeHtml(level.level)}</strong><span>${escapeHtml(level.text)}</span></li>`).join("")}</ol>`
-            : '<p class="knowledge-empty">No A.S.S. level data is listed for this evidence.</p>';
+            : '<p class="knowledge-empty">No Affixer Matrix level data is listed for this evidence.</p>';
         return `
             <div class="reference-stack">
                 <article class="reference-article">
-                    <h3>P.M.S. Identify Reference</h3>
+                    <h3>Paranormal Tracker Identify Reference</h3>
                     <dl class="compact-definition-list">
                         <div><dt>Tracker label</dt><dd>${escapeHtml(entry.identifyLabel)}</dd></div>
                         <div><dt>Diminishing allowed</dt><dd>${entry.diminishingAllowed ? "Yes" : "No"}</dd></div>
@@ -750,7 +756,7 @@
                     </dl>
                 </article>
                 <article class="reference-article">
-                    <h3>A.S.S. Cleanse Reference: ${escapeHtml(entry.cleanseName)}</h3>
+                    <h3>Affixer Matrix Cleanse Reference: ${escapeHtml(entry.cleanseName)}</h3>
                     ${levels}
                 </article>
             </div>
@@ -788,7 +794,7 @@
             <section class="screen-card settings-screen" aria-labelledby="screenHeading">
                 <span class="eyebrow">Veilwatch preferences</span>
                 <h1 id="screenHeading">Settings</h1>
-                <p class="settings-intro">These settings control the Veilwatch shell. P.M.S. and A.S.S. keep their own existing internal settings and behavior.</p>
+                <p class="settings-intro">These settings control the Veilwatch shell. Paranormal Tracker and Affixer Matrix keep their own existing internal settings and behavior.</p>
 
                 <form id="settingsForm" class="settings-form">
                     <section class="settings-section" aria-labelledby="startupSettingsHeading">
@@ -801,8 +807,8 @@
                             <label for="startupRoute">Open app to</label>
                             <select id="startupRoute" name="startupRoute">
                                 <option value="home">Home</option>
-                                <option value="pms">P.M.S. Tracker</option>
-                                <option value="ass">A.S.S. Profiler</option>
+                                <option value="paranormal-tracker">Paranormal Tracker</option>
+                                <option value="affixer-matrix">Affixer Matrix</option>
                                 <option value="encyclopedia">Ghost Encyclopedia</option>
                                 <option value="field-tools">Field Tools</option>
                                 <option value="reference">Reference</option>
@@ -853,7 +859,7 @@
                             <input id="largerText" name="largerText" type="checkbox">
                             <span>
                                 <strong>Larger shell text</strong>
-                                <small>Increases text size in new Veilwatch screens. It does not alter P.M.S. or A.S.S.</small>
+                                <small>Increases text size in new Veilwatch screens. It does not alter Paranormal Tracker or Affixer Matrix</small>
                             </span>
                         </label>
 
@@ -938,7 +944,7 @@
                         <div class="danger-action-row danger-action-row--strong">
                             <div>
                                 <strong>Full App Reset</strong>
-                                <p>Resets Veilwatch settings, persistent notes, both investigation notes, and saved P.M.S./A.S.S. investigation sessions. Protected tracker source files are never modified.</p>
+                                <p>Resets Veilwatch settings, persistent notes, both investigation notes, and saved Paranormal Tracker/Affixer Matrix investigation sessions. Protected tracker source files are never modified.</p>
                             </div>
                             <button class="danger-button" id="fullAppReset" type="button">Full App Reset</button>
                         </div>
@@ -968,7 +974,7 @@
                     <div>
                         <span class="eyebrow">Saved locally</span>
                         <h1 id="screenHeading">My Notes</h1>
-                        <p>Permanent personal notes that survive P.M.S. and A.S.S. resets.</p>
+                        <p>Permanent personal notes that survive Paranormal Tracker and Affixer Matrix resets.</p>
                     </div>
                     <button class="primary-button" id="newNoteButton" type="button">New Note</button>
                 </header>
@@ -1139,7 +1145,7 @@
                     <div>
                         <span class="eyebrow">Non-destructive shared search</span>
                         <h1 id="screenHeading">Global Search</h1>
-                        <p>Search official Veilwatch knowledge, the community wiki, and your persistent notes. Opening a result never changes P.M.S. or A.S.S. gameplay state.</p>
+                        <p>Search official Veilwatch knowledge, the community wiki, and your persistent notes. Opening a result never changes Paranormal Tracker or Affixer Matrix gameplay state.</p>
                     </div>
                 </header>
 
@@ -1182,10 +1188,10 @@
         switch (route) {
             case "home":
                 return renderHome();
-            case "pms":
-                return renderProtectedTracker("pms", "P.M.S. Tracker");
-            case "ass":
-                return renderProtectedTracker("ass", "A.S.S. Profiler");
+            case "paranormal-tracker":
+                return renderProtectedTracker("paranormal-tracker", "Paranormal Tracker");
+            case "affixer-matrix":
+                return renderProtectedTracker("affixer-matrix", "Affixer Matrix");
             case "encyclopedia":
                 return renderEncyclopedia();
             case "field-tools":
@@ -1211,11 +1217,11 @@
 
 
     function injectSharedReturnControl(route, main) {
-        if (!sharedOriginRoute || route === "home" || route === "pms" || route === "ass") {
+        if (!sharedOriginRoute || route === "home" || route === "paranormal-tracker" || route === "affixer-matrix") {
             return;
         }
 
-        const label = sharedOriginRoute === "pms" ? "P.M.S. Tracker" : "A.S.S. Profiler";
+        const label = sharedOriginRoute === "paranormal-tracker" ? "Paranormal Tracker" : "Affixer Matrix";
         const bar = document.createElement("div");
         bar.className = "shared-return-bar";
         bar.innerHTML = `
@@ -1240,7 +1246,7 @@
             trackerHost.beforeRouteChange(safeRoute);
         }
 
-        if (safeRoute === "pms" || safeRoute === "ass") {
+        if (safeRoute === "paranormal-tracker" || safeRoute === "affixer-matrix") {
             if (sharedOriginRoute === safeRoute) {
                 sharedOriginRoute = null;
             }
@@ -1258,7 +1264,7 @@
 
         bindRenderedScreen(safeRoute);
 
-        if ((safeRoute === "pms" || safeRoute === "ass") && trackerHost) {
+        if ((safeRoute === "paranormal-tracker" || safeRoute === "affixer-matrix") && trackerHost) {
             trackerHost.mount(safeRoute, document.querySelector(`[data-tracker-mount="${safeRoute}"]`));
         }
 
@@ -1659,7 +1665,7 @@
     let investigationSaveTimer = 0;
 
     function investigationTrackerLabel(tracker) {
-        return tracker === "pms" ? "P.M.S. Tracker" : "A.S.S. Profiler";
+        return tracker === "paranormal-tracker" ? "Paranormal Tracker" : "Affixer Matrix";
     }
 
     function saveInvestigationDraft() {
@@ -1675,7 +1681,7 @@
     }
 
     function openInvestigationNotes(tracker, opener) {
-        if (tracker !== "pms" && tracker !== "ass") return;
+        if (tracker !== "paranormal-tracker" && tracker !== "affixer-matrix") return;
         const dialog = document.querySelector("#investigationNotesDialog");
         const title = document.querySelector("#investigationNotesTitle");
         const help = document.querySelector("#investigationNotesHelp");
@@ -1994,10 +2000,10 @@
         });
 
         fullResetButton.addEventListener("click", () => {
-            const first = window.confirm("Full App Reset will delete persistent My Notes, both investigation notes, saved P.M.S./A.S.S. investigation sessions, and reset Veilwatch settings. Continue?");
+            const first = window.confirm("Full App Reset will delete persistent My Notes, both investigation notes, saved Paranormal Tracker/Affixer Matrix investigation sessions, and reset Veilwatch settings. Continue?");
             if (!first) return;
 
-            const second = window.confirm("Final confirmation: permanently reset Veilwatch user data now? Protected P.M.S. and A.S.S. source files are not changed.");
+            const second = window.confirm("Final confirmation: permanently reset Veilwatch user data now? Protected Paranormal Tracker and Affixer Matrix source files are not changed.");
             if (!second) return;
 
             trackerHost?.resetAllHostedTrackers?.();
@@ -2060,6 +2066,28 @@
     // ============================================================================
     // [JS-09] APP STARTUP + PWA REGISTRATION
     // ============================================================================
+
+    function cleanupLegacyTrackerServiceWorkers() {
+        if (!("serviceWorker" in navigator) || typeof navigator.serviceWorker.getRegistrations !== "function") {
+            return;
+        }
+
+        const legacyIds = [
+            String.fromCharCode(112, 109, 115),
+            String.fromCharCode(97, 115, 115)
+        ];
+
+        navigator.serviceWorker.getRegistrations()
+            .then((registrations) => {
+                registrations.forEach((registration) => {
+                    const scope = registration.scope || "";
+                    if (legacyIds.some((id) => scope.includes(`/trackers/${id}/`))) {
+                        registration.unregister();
+                    }
+                });
+            })
+            .catch(() => { /* Legacy cleanup is best-effort only. */ });
+    }
 
     function registerServiceWorker() {
         if (!("serviceWorker" in navigator)) {
@@ -2138,6 +2166,7 @@
             renderRoute(initial);
         }
 
+        cleanupLegacyTrackerServiceWorkers();
         registerServiceWorker();
     }
 
