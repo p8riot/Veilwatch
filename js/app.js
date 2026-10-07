@@ -22,7 +22,7 @@
         reference: { title: "Reference", nav: true },
         search: { title: "Global Search", nav: true },
         notes: { title: "My Notes", nav: true },
-        maps: { title: "Maps", nav: true, comingSoon: true },
+        maps: { title: "Locations", nav: false },
         settings: { title: "Settings", nav: true }
     };
 
@@ -176,7 +176,7 @@
     // [JS-05] SCREEN TEMPLATES
     // ============================================================================
 
-    function placeholder(title, message, badge = "Planned") {
+    function placeholder(title, message, badge = "Unavailable") {
         return `
             <section class="screen-card placeholder-card" aria-labelledby="screenHeading">
                 <span class="eyebrow">${badge}</span>
@@ -230,17 +230,13 @@
                         ${utilityLauncherCard("reference", "Reference", "Evidence, mechanics and equipment", "./assets/utility/reference.png")}
                         ${utilityLauncherCard("search", "Global Search", "Search the entire knowledge library", "./assets/utility/search.png")}
                         ${utilityLauncherCard("notes", "My Notes", "Persistent personal notes", "./assets/utility/notes.png")}
-                        ${utilityLauncherCard("maps", "Maps", "Full map library", "./assets/utility/maps.png", true)}
+                        ${utilityExternalLauncherCard(
+                            "https://theotherside-game.fandom.com/wiki/The_Other_Side_Wiki",
+                            "Wiki - by nena",
+                            "Unofficial community wiki",
+                            "./assets/utility/wiki.png"
+                        )}
                         ${utilityLauncherCard("settings", "Settings", "Startup, appearance and data", "./assets/utility/settings.png")}
-                    </div>
-
-                    <div class="community-launcher-row" aria-label="Community resource">
-                        <div class="wiki-launcher-card">
-                            <a class="wiki-launcher-icon-link" href="https://theotherside-game.fandom.com/wiki/The_Other_Side_Wiki" target="_blank" rel="noopener noreferrer" aria-label="Open the unofficial The Other Side Wiki by nena">
-                                <img src="./assets/utility/wiki.png" alt="Doorway in the Veil icon">
-                            </a>
-                            <span>Wiki - by nena</span>
-                        </div>
                     </div>
                 </div>
             </section>
@@ -263,21 +259,27 @@
         `;
     }
 
-    function utilityLauncherCard(route, title, subtitle, imageSrc, disabled = false) {
-        const disabledClass = disabled ? " utility-card--disabled" : "";
-        const disabledAttr = disabled ? ' aria-disabled="true"' : '';
-        const routeAttr = disabled ? "" : ` data-route="${route}"`;
-        const status = disabled ? '<span class="utility-card__status">Coming Soon</span>' : "";
-
+    function utilityLauncherCard(route, title, subtitle, imageSrc) {
         return `
-            <button class="utility-card${disabledClass}" type="button"${routeAttr}${disabledAttr}>
+            <button class="utility-card" type="button" data-route="${route}">
                 <span class="utility-card__icon-wrap" aria-hidden="true"><img class="utility-card__icon" src="${imageSrc}" alt=""></span>
                 <span class="utility-card__copy">
                     <strong>${title}</strong>
                     <span>${subtitle}</span>
                 </span>
-                ${status}
             </button>
+        `;
+    }
+
+    function utilityExternalLauncherCard(url, title, subtitle, imageSrc) {
+        return `
+            <a class="utility-card" href="${url}" target="_blank" rel="noopener noreferrer" aria-label="Open ${title} in a new tab">
+                <span class="utility-card__icon-wrap" aria-hidden="true"><img class="utility-card__icon" src="${imageSrc}" alt=""></span>
+                <span class="utility-card__copy">
+                    <strong>${title}</strong>
+                    <span>${subtitle}</span>
+                </span>
+            </a>
         `;
     }
 
@@ -289,16 +291,16 @@
             <section class="field-tools-screen" aria-labelledby="screenHeading">
                 <header class="knowledge-heading">
                     <div>
-                        <span class="eyebrow">Shared utilities</span>
+                        <span class="eyebrow">Investigation tools</span>
                         <h1 id="screenHeading">Field Tools</h1>
-                        <p>Shared utilities live here instead of being duplicated inside Paranormal Tracker and Affixer Matrix</p>
+                        <p>Use the map picker and Spirit Box phrase reference during investigations.</p>
                     </div>
                 </header>
 
                 <div class="field-tools-grid">
                     <article class="field-tool-card field-tool-card--wide">
                         <h2>Map Picker</h2>
-                        <p>This random picker is available now. The full interactive map library remains Coming Soon.</p>
+                        <p>Choose which locations to include, then spin for a random map.</p>
                         <div class="shared-map-wheel-wrap">
                             <canvas id="sharedMapWheel" class="shared-map-wheel" width="420" height="420" aria-label="Random map picker wheel"></canvas>
                         </div>
@@ -506,9 +508,9 @@
             <section class="knowledge-screen encyclopedia-screen" aria-labelledby="screenHeading">
                 <header class="knowledge-heading">
                     <div>
-                        <span class="eyebrow">Shared read-only knowledge</span>
+                        <span class="eyebrow">Ghost reference</span>
                         <h1 id="screenHeading">Ghost Encyclopedia</h1>
-                        <p>${knowledge.metadata.ghostCount} ghost profiles sourced from the protected Paranormal Tracker ${escapeHtml(knowledge.metadata.paranormalTracker.version)} baseline.</p>
+                        <p>${knowledge.metadata.ghostCount} ghost profiles with lore, evidence, behaviors, and investigation details.</p>
                     </div>
                 </header>
 
@@ -649,19 +651,19 @@
             <section class="knowledge-screen reference-screen" aria-labelledby="screenHeading">
                 <header class="knowledge-heading">
                     <div>
-                        <span class="eyebrow">Canonical shared library</span>
+                        <span class="eyebrow">Investigation reference</span>
                         <h1 id="screenHeading">Reference</h1>
-                        <p>Read-only reference material sourced from the protected Paranormal Tracker 2.3.1 and Affixer Matrix 1.4.1 baselines. Reading Reference never changes either tracker.</p>
+                        <p>Browse evidence, behaviors, mechanics, locations, equipment, and special references.</p>
                     </div>
                 </header>
                 <div class="reference-category-grid">
                     ${referenceCategoryCard("evidence", "Evidence", "Identify evidence plus Affixer Matrix evidence levels.", `${knowledge.evidence.length} types`)}
                     ${referenceCategoryCard("behaviors", "Behaviors", "Paranormal Tracker behavior observations and states.", `${knowledge.behaviors.length} controls`)}
-                    ${referenceCategoryCard("spirit-box", "Spirit Box", "Canonical phrases and Skia unique responses.", `${knowledge.spiritBox.phrases.length} phrases`)}
+                    ${referenceCategoryCard("spirit-box", "Spirit Box", "Spirit Box phrases and Skia unique responses.", `${knowledge.spiritBox.phrases.length} phrases`)}
                     ${referenceCategoryCard("cleansing", "Cleansing", "Affixer Matrix investigation, scanner and cleansing field notes.")}
                     ${referenceCategoryCard("equipment", "Equipment", "Affixer commands, scan states and E.A.L. guidance.")}
                     ${referenceCategoryCard("mechanics", "Mechanics", "Hunts, evidence rules, breakers, candles and more.", `${knowledge.mechanics.length} notes`)}
-                    ${referenceCategoryCard("locations", "Locations", "Supported locations. Map artwork remains Coming Soon.", `${knowledge.locations.length} locations`)}
+                    ${referenceCategoryCard("locations", "Locations", "Supported investigation locations.", `${knowledge.locations.length} locations`)}
                     ${referenceCategoryCard("special", "Special References", "Iblis shapeshifting and other ghost-specific reference material.")}
                 </div>
             </section>
@@ -699,7 +701,7 @@
                     break;
                 case "spirit-box":
                     title = "Spirit Box";
-                    body = `<article class="reference-article"><h3>Canonical Phrases</h3><div class="phrase-grid">${knowledge.spiritBox.phrases.map((phrase) => `<span>${escapeHtml(phrase)}</span>`).join("")}</div></article><article class="reference-article"><h3>Skia Unique Audio Responses</h3><ul class="knowledge-list">${knowledge.spiritBox.skiaUniqueResponses.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul></article>`;
+                    body = `<article class="reference-article"><h3>Spirit Box Phrases</h3><div class="phrase-grid">${knowledge.spiritBox.phrases.map((phrase) => `<span>${escapeHtml(phrase)}</span>`).join("")}</div></article><article class="reference-article"><h3>Skia Unique Audio Responses</h3><ul class="knowledge-list">${knowledge.spiritBox.skiaUniqueResponses.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul></article>`;
                     break;
                 case "cleansing":
                     title = "Cleansing";
@@ -717,7 +719,7 @@
                     break;
                 case "locations":
                     title = "Locations";
-                    body = `<div class="location-reference-grid">${knowledge.locations.map((location) => `<article><strong>${escapeHtml(location)}</strong><span>Reference location</span></article>`).join("")}</div><div class="coming-soon-inline"><strong>Maps are Coming Soon.</strong><span>The location list is available now, but map artwork and the map viewer remain disabled in 0.5.0.</span></div>`;
+                    body = `<div class="location-reference-grid">${knowledge.locations.map((location) => `<article><strong>${escapeHtml(location)}</strong><span>Investigation location</span></article>`).join("")}</div>`;
                     break;
                 case "special":
                     title = "Special References";
@@ -733,7 +735,7 @@
             <section class="knowledge-screen reference-detail" aria-labelledby="screenHeading">
                 <header class="profile-header">
                     <button class="knowledge-back" type="button" data-knowledge-back="reference">← Reference</button>
-                    <span class="eyebrow">Shared reference</span>
+                    <span class="eyebrow">Reference</span>
                     <h1 id="screenHeading">${escapeHtml(title)}</h1>
                 </header>
                 <div class="reference-detail-body">${body}</div>
@@ -794,7 +796,7 @@
             <section class="screen-card settings-screen" aria-labelledby="screenHeading">
                 <span class="eyebrow">Veilwatch preferences</span>
                 <h1 id="screenHeading">Settings</h1>
-                <p class="settings-intro">These settings control the Veilwatch shell. Paranormal Tracker and Affixer Matrix keep their own existing internal settings and behavior.</p>
+                <p class="settings-intro">Choose how Veilwatch starts, looks, installs, and manages your data.</p>
 
                 <form id="settingsForm" class="settings-form">
                     <section class="settings-section" aria-labelledby="startupSettingsHeading">
@@ -814,14 +816,13 @@
                                 <option value="reference">Reference</option>
                                 <option value="notes">My Notes</option>
                             </select>
-                            <p class="setting-help">Maps is intentionally unavailable as a launch destination while it is Coming Soon.</p>
                         </div>
                     </section>
 
                     <section class="settings-section" aria-labelledby="appearanceSettingsHeading">
                         <div class="settings-section__heading">
                             <span class="eyebrow">Appearance</span>
-                            <h2 id="appearanceSettingsHeading">Shell Appearance</h2>
+                            <h2 id="appearanceSettingsHeading">Appearance</h2>
                         </div>
 
                         <div class="setting-group">
@@ -851,15 +852,15 @@
                             <input id="reducedMotion" name="reducedMotion" type="checkbox">
                             <span>
                                 <strong>Reduce motion</strong>
-                                <small>Minimizes decorative transitions in the Veilwatch shell.</small>
+                                <small>Reduces decorative transitions and motion.</small>
                             </span>
                         </label>
 
                         <label class="toggle-row">
                             <input id="largerText" name="largerText" type="checkbox">
                             <span>
-                                <strong>Larger shell text</strong>
-                                <small>Increases text size in new Veilwatch screens. It does not alter Paranormal Tracker or Affixer Matrix</small>
+                                <strong>Larger text</strong>
+                                <small>Increases text size in Veilwatch menus, reference pages, and settings.</small>
                             </span>
                         </label>
 
@@ -893,7 +894,7 @@
                     <div class="settings-section__heading">
                         <span class="eyebrow">Data</span>
                         <h2 id="backupSettingsHeading">Backup & Restore</h2>
-                        <p>Backups include persistent My Notes and, for a full backup, Veilwatch settings. Active investigation notes and temporary tracker state are intentionally excluded.</p>
+                        <p>Backups include persistent My Notes and, for a full backup, Veilwatch settings. Active investigation notes and tracker sessions are not included.</p>
                     </div>
 
                     <div class="backup-actions">
@@ -929,7 +930,7 @@
                     <div class="settings-section__heading">
                         <span class="eyebrow">Data management</span>
                         <h2 id="dataManagementHeading">Reset & Delete</h2>
-                        <p>These actions are intentionally separate so resetting preferences cannot accidentally erase permanent notes.</p>
+                        <p>Reset preferences and permanent notes separately.</p>
                     </div>
 
                     <div class="danger-action-list">
@@ -944,7 +945,7 @@
                         <div class="danger-action-row danger-action-row--strong">
                             <div>
                                 <strong>Full App Reset</strong>
-                                <p>Resets Veilwatch settings, persistent notes, both investigation notes, and saved Paranormal Tracker/Affixer Matrix investigation sessions. Protected tracker source files are never modified.</p>
+                                <p>Resets Veilwatch settings, persistent notes, both investigation notes, and saved Paranormal Tracker/Affixer Matrix investigation sessions.</p>
                             </div>
                             <button class="danger-button" id="fullAppReset" type="button">Full App Reset</button>
                         </div>
@@ -1143,9 +1144,9 @@
             <section class="search-screen" aria-labelledby="screenHeading">
                 <header class="knowledge-heading">
                     <div>
-                        <span class="eyebrow">Non-destructive shared search</span>
+                        <span class="eyebrow">Search Veilwatch</span>
                         <h1 id="screenHeading">Global Search</h1>
-                        <p>Search official Veilwatch knowledge, the community wiki, and your persistent notes. Opening a result never changes Paranormal Tracker or Affixer Matrix gameplay state.</p>
+                        <p>Search ghosts, evidence, references, locations, the community wiki, and your persistent notes.</p>
                     </div>
                 </header>
 
@@ -1174,14 +1175,7 @@
     }
 
     function renderMaps() {
-        return `
-            <section class="screen-card coming-soon-screen" aria-labelledby="screenHeading">
-                <span class="eyebrow">Planned feature</span>
-                <h1 id="screenHeading">Maps</h1>
-                <div class="coming-soon-badge">Coming Soon</div>
-                <p>The map library is intentionally unavailable while the complete map set is prepared.</p>
-            </section>
-        `;
+        return renderReferenceDetail("locations");
     }
 
     function contentForRoute(route) {
@@ -2003,7 +1997,7 @@
             const first = window.confirm("Full App Reset will delete persistent My Notes, both investigation notes, saved Paranormal Tracker/Affixer Matrix investigation sessions, and reset Veilwatch settings. Continue?");
             if (!first) return;
 
-            const second = window.confirm("Final confirmation: permanently reset Veilwatch user data now? Protected Paranormal Tracker and Affixer Matrix source files are not changed.");
+            const second = window.confirm("Final confirmation: permanently reset Veilwatch user data now?");
             if (!second) return;
 
             trackerHost?.resetAllHostedTrackers?.();

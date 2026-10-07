@@ -209,8 +209,8 @@
                 filterType: "location",
                 group: "Locations",
                 title: location,
-                subtitle: "Location reference · Maps Coming Soon",
-                body: "Supported location map location",
+                subtitle: "Location reference",
+                body: "Supported investigation location",
                 aliases: ["location", "map", "maps"],
                 target: { route: "reference", view: "locations" }
             }));

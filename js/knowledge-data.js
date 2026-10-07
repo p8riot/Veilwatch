@@ -1,7 +1,7 @@
 window.tosKnowledge = {
     "metadata": {
         "schemaVersion": 1,
-        "generatedFor": "Veilwatch 0.5.0",
+        "generatedFor": "Veilwatch 0.5.1",
         "paranormalTracker": {
             "version": "2.3.1",
             "entry": "trackers/paranormal-tracker/Index.html",

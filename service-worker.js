@@ -1,6 +1,6 @@
 "use strict";
 
-const CACHE_NAME = "veilwatch-0.5.0-release";
+const CACHE_NAME = "veilwatch-0.5.1-release";
 const LEGACY_TRACKER_CACHE_PREFIXES = [
     `${String.fromCharCode(112, 109, 115)}-tracker-`,
     `${String.fromCharCode(97, 115, 115)}-profiler-`

@@ -354,6 +354,7 @@ button {
     background: transparent;
     color: var(--muted);
     text-align: left;
+    text-decoration: none;
     cursor: pointer;
 }
 
@@ -634,7 +635,7 @@ body[data-route="home"] .app-main {
     width: min(980px, 100%);
     margin-left: auto;
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 10px;
 }
 
@@ -652,6 +653,7 @@ body[data-route="home"] .app-main {
     background: rgba(3, 8, 13, 0.85);
     color: var(--text);
     text-align: left;
+    text-decoration: none;
     cursor: pointer;
     transition: border-color 140ms ease, background 140ms ease, transform 140ms ease;
 }
@@ -2513,53 +2515,6 @@ body[data-route="affixer-matrix"] .app-main {
 /* =====================================================================
 [CSS-13] VEILWATCH COMMUNITY + ABOUT REFINEMENTS
 ===================================================================== */
-
-.community-launcher-row {
-    width: min(980px, 100%);
-    margin-left: auto;
-    display: flex;
-    justify-content: flex-start;
-}
-
-.wiki-launcher-card {
-    min-width: 132px;
-    display: grid;
-    justify-items: center;
-    gap: 9px;
-    padding: 12px 14px 13px;
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 12px;
-    background: rgba(3, 8, 13, 0.85);
-    color: var(--text);
-}
-
-.wiki-launcher-icon-link {
-    width: 78px;
-    height: 78px;
-    display: block;
-    border-radius: 20px;
-    overflow: hidden;
-    transition: transform 140ms ease, box-shadow 140ms ease;
-}
-
-.wiki-launcher-icon-link:hover,
-.wiki-launcher-icon-link:focus-visible {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 30px rgba(77, 182, 255, 0.18);
-}
-
-.wiki-launcher-icon-link img {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-}
-
-.wiki-launcher-card span {
-    font-size: 0.82rem;
-    font-weight: 700;
-    text-align: center;
-}
 
 .search-source-section--community {
     padding-top: 20px;
