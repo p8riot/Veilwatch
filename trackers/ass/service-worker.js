@@ -1,5 +1,5 @@
 const CACHE_PREFIX = 'ass-profiler-';
-const CACHE_NAME = `${CACHE_PREFIX}1.4.1`;
+const CACHE_NAME = `${CACHE_PREFIX}1.4.1-vw-0.4.1`;
 const CORE_ASSETS = [
   './cleanse.html',
   './manifest.webmanifest',

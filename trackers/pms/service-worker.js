@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pms-tracker-2.3.1-2026-10-04-release';
+const CACHE_NAME = 'pms-tracker-2.3.1-2026-10-04-release-vw-0.4.1';
 const APP_SHELL = [
   './Index.html',
   './manifest.webmanifest',

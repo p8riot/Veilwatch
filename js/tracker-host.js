@@ -145,7 +145,12 @@
             case "tos:navigate":
                 if (typeof message.route === "string") {
                     window.dispatchEvent(new CustomEvent("tos:tracker-navigate", {
-                        detail: { tracker: runtime.key, route: message.route }
+                        detail: {
+                            tracker: runtime.key,
+                            route: message.route,
+                            action: typeof message.action === "string" ? message.action : null,
+                            mapName: typeof message.mapName === "string" ? message.mapName : null
+                        }
                     }));
                 }
                 break;

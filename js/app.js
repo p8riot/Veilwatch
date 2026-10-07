@@ -114,6 +114,7 @@
     let pendingNoteContext = null;
     let sharedOriginRoute = null;
     let deferredInstallPrompt = null;
+    let pendingFieldToolAction = null;
 
     const sharedMapNames = Object.freeze([
         "St. Joseph's Orphanage",
@@ -428,6 +429,23 @@
         requestAnimationFrame(frame);
     }
 
+    function applyPendingFieldToolAction() {
+        const pending = pendingFieldToolAction;
+        pendingFieldToolAction = null;
+        if (!pending) return;
+
+        if (pending.action === "spin-map") {
+            spinSharedMapWheel();
+            return;
+        }
+
+        if (pending.action === "show-map" && sharedMapNames.includes(pending.mapName)) {
+            fieldToolsMapState.result = `Destination: ${pending.mapName}`;
+            const result = document.querySelector("#sharedMapResult");
+            if (result) result.textContent = fieldToolsMapState.result;
+        }
+    }
+
     function bindFieldTools() {
         document.querySelectorAll("[data-shared-map]").forEach((button) => {
             button.addEventListener("click", () => {
@@ -456,6 +474,7 @@
 
         document.querySelector("#sharedMapSpin")?.addEventListener("click", spinSharedMapWheel);
         updateSharedMapControls();
+        applyPendingFieldToolAction();
     }
 
 
@@ -692,7 +711,7 @@
                     break;
                 case "locations":
                     title = "Locations";
-                    body = `<div class="location-reference-grid">${knowledge.locations.map((location) => `<article><strong>${escapeHtml(location)}</strong><span>Reference location</span></article>`).join("")}</div><div class="coming-soon-inline"><strong>Maps are Coming Soon.</strong><span>The location list is available now, but map artwork and the map viewer remain disabled in 0.2.0.</span></div>`;
+                    body = `<div class="location-reference-grid">${knowledge.locations.map((location) => `<article><strong>${escapeHtml(location)}</strong><span>Reference location</span></article>`).join("")}</div><div class="coming-soon-inline"><strong>Maps are Coming Soon.</strong><span>The location list is available now, but map artwork and the map viewer remain disabled in 0.4.1.</span></div>`;
                     break;
                 case "special":
                     title = "Special References";
@@ -2094,7 +2113,18 @@
 
         window.addEventListener("tos:tracker-navigate", (event) => {
             const route = event.detail?.route;
-            if (config.routes.includes(route)) navigate(route);
+            if (!config.routes.includes(route)) return;
+
+            if (route === "field-tools") {
+                const action = event.detail?.action;
+                if (action === "spin-map") {
+                    pendingFieldToolAction = { action };
+                } else if (action === "show-map" && sharedMapNames.includes(event.detail?.mapName)) {
+                    pendingFieldToolAction = { action, mapName: event.detail.mapName };
+                }
+            }
+
+            navigate(route);
         });
 
         window.addEventListener("hashchange", () => {

@@ -3257,7 +3257,16 @@ header .apple-install-note {
             }
 
             if (text.includes("spin wheel") || text.includes("spin map") || text.includes("random map") || text.includes("pick a map") || text.includes("choose map") || text.includes("pick map")) {
-                scrollToMapPickerAndSpin();
+                if (window.parent !== window) {
+                    window.parent.postMessage({
+                        type: "tos:navigate",
+                        tracker: "ass",
+                        route: "field-tools",
+                        action: "spin-map"
+                    }, "*");
+                } else {
+                    scrollToMapPickerAndSpin();
+                }
                 return;
             }
 
@@ -3275,7 +3284,17 @@ header .apple-install-note {
 
             for (let m of mapTriggers) {
                 if (m.keys.some(k => text.includes(k))) {
-                    showSelectedMap(m.name);
+                    if (window.parent !== window) {
+                        window.parent.postMessage({
+                            type: "tos:navigate",
+                            tracker: "ass",
+                            route: "field-tools",
+                            action: "show-map",
+                            mapName: m.name
+                        }, "*");
+                    } else {
+                        showSelectedMap(m.name);
+                    }
                     return;
                 }
             }

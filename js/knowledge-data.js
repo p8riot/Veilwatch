@@ -1,16 +1,16 @@
 window.tosKnowledge = {
     "metadata": {
         "schemaVersion": 1,
-        "generatedFor": "Veilwatch 0.4.0",
+        "generatedFor": "Veilwatch 0.4.1",
         "pms": {
             "version": "2.3.1",
             "entry": "trackers/pms/Index.html",
-            "sha256": "2a784dcde440dac9d6f84ab25a0deb784c0fe8552c531090eda0c725083042b5"
+            "sha256": "b02ac0b8586a4325057b9ff575a3d974a52bdab115fb9c22cd16cba7b13c1218"
         },
         "ass": {
             "version": "1.4.1",
             "entry": "trackers/ass/cleanse.html",
-            "sha256": "1b70f851bcb0ffaae104a59622f1f9049868674bb9ae33a755f611d5b0bfbb91"
+            "sha256": "c9ed29f24c6396e60a9795fcc559344f4ca76093672b873c78e9710455167d6f"
         },
         "ghostCount": 25
     },
@@ -1881,7 +1881,9 @@ window.tosKnowledge = {
         "Stone Manor Plantation",
         "317 Aspen Heights",
         "1205 Cedar Street",
-        "12 Ravenwood Lane"
+        "12 Ravenwood Lane",
+        "Blackmeadow",
+        "The McGavin House"
     ],
     "specialReferences": {
         "iblisShapeshifting": [

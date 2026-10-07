@@ -6273,7 +6273,16 @@ These rules intentionally appear later so they can override base rules.
                 text.includes("spin the wheel") ||
                 text.includes("spin wheel")
             ) {
-                pickMapByVoice();
+                if (window.parent !== window) {
+                    window.parent.postMessage({
+                        type: "tos:navigate",
+                        tracker: "pms",
+                        route: "field-tools",
+                        action: "spin-map"
+                    }, "*");
+                } else {
+                    pickMapByVoice();
+                }
                 return;
             }
 

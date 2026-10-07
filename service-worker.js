@@ -1,6 +1,6 @@
 "use strict";
 
-const CACHE_NAME = "veilwatch-0.4.0-release";
+const CACHE_NAME = "veilwatch-0.4.1-release";
 const APP_SHELL = [
     "./",
     "./index.html",
