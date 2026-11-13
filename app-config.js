@@ -2,7 +2,7 @@ window.tosAllInOneConfig = {
     productId: "veilwatch",
     productName: "Veilwatch",
     shortName: "Veilwatch",
-    version: "0.5.1",
+    version: "1.1.0",
     maturity: "Development",
     userDataSchema: 1,
     settingsSchema: 2,

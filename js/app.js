@@ -962,7 +962,10 @@
                         <div><dt>Version</dt><dd>${escapeHtml(config.version)}</dd></div>
                     </dl>
                     <p class="setting-help">Created by <a href="https://linktr.ee/p8riot" target="_blank" rel="noopener noreferrer">p8riot</a> using his p8Core App Builder.</p>
-                    <p class="setting-help">A product of <a href="https://www.youtube.com/@themidnightwirehq" target="_blank" rel="noopener noreferrer">The Midnight Wire HQ</a>.</p>
+                    <p class="setting-help">An affiliate of <a href="https://www.youtube.com/@themidnightwirehq" target="_blank" rel="noopener noreferrer">The Midnight Wire HQ</a>.</p>
+                    <p class="setting-help">Report app issues by tagging <strong>@p8riot</strong> in the official <a href="https://discord.gg/pXdu4szwaA" target="_blank" rel="noopener noreferrer">The Other Side Discord Server</a>.</p>
+                    <p class="setting-help"><strong>Unofficial fan-made app.</strong> Veilwatch is an independent fan project and is not affiliated with, sponsored by, or endorsed by The Other Side, its developers, publishers, or rights holders. All game-related names, trademarks, artwork, and other third-party materials belong to their respective owners.</p>
+                    <p class="setting-help"><strong>Rights and permissions.</strong> Original Veilwatch materials &copy; 2026 p8riot. All rights reserved. No permission is granted to copy, reproduce, modify, redistribute, republish, sell, or commercially exploit Veilwatch or its original code, design, or content without prior written permission, except as permitted by law.</p>
                 </section>
             </section>
         `;
@@ -2084,15 +2087,7 @@
     }
 
     function registerServiceWorker() {
-        if (!("serviceWorker" in navigator)) {
-            return;
-        }
-
-        window.addEventListener("load", () => {
-            navigator.serviceWorker.register("./service-worker.js").catch((error) => {
-                console.warn("Service worker registration failed:", error);
-            });
-        }, { once: true });
+        window.tosAppUpdates?.start();
     }
 
     function start() {

@@ -1,6 +1,6 @@
 "use strict";
 
-const CACHE_NAME = "veilwatch-0.5.1-release";
+const CACHE_NAME = "veilwatch-1.1.0-release";
 const LEGACY_TRACKER_CACHE_PREFIXES = [
     `${String.fromCharCode(112, 109, 115)}-tracker-`,
     `${String.fromCharCode(97, 115, 115)}-profiler-`
@@ -17,6 +17,7 @@ const APP_SHELL = [
     "./js/tracker-host.js",
     "./js/knowledge-data.js",
     "./js/search.js",
+    "./js/app-updates.js",
     "./js/app.js",
     "./manifest.webmanifest",
     "./assets/the-other-side-home.png",
@@ -128,19 +129,31 @@ self.addEventListener("fetch", (event) => {
         return;
     }
 
+    const isAppCode = /\.(?:js|css|webmanifest)$/.test(requestUrl.pathname);
+    if (isAppCode) {
+        // Online: load the current GitHub release. Offline: fall back to the cached release.
+        event.respondWith(
+            fetch(event.request)
+                .then((response) => {
+                    if (response && response.ok && response.type === "basic" && event.request.cache !== "no-store") {
+                        const copy = response.clone();
+                        event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy)));
+                    }
+                    return response;
+                })
+                .catch(() => caches.match(event.request))
+        );
+        return;
+    }
+
     event.respondWith(
         caches.match(event.request).then((cached) => {
-            if (cached) {
-                return cached;
-            }
-
+            if (cached) return cached;
             return fetch(event.request).then((response) => {
-                if (!response || response.status !== 200 || response.type !== "basic") {
-                    return response;
+                if (response && response.ok && response.type === "basic") {
+                    const copy = response.clone();
+                    event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy)));
                 }
-
-                const copy = response.clone();
-                caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
                 return response;
             });
         })
